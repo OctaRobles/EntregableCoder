@@ -1,0 +1,80 @@
+export const userList = [
+    {
+        first_name: "Orly",
+        last_name: "Restall",
+        email: "orestall0@multiply.com",
+        gender: "Female",
+    },
+    {
+        first_name: "Ingeborg",
+        last_name: "Lowings",
+        email: "ilowings1@unesco.org",
+        gender: "Female",
+    },
+    {
+        first_name: "Dani",
+        last_name: "Cracknell",
+        email: "dcracknell2@pcworld.com",
+        gender: "Female",
+    },
+    {
+        first_name: "Frederico",
+        last_name: "Hulstrom",
+        email: "fhulstrom3@dion.ne.jp",
+        gender: "Male",
+    },
+    {
+        first_name: "Richmound",
+        last_name: "Dannohl",
+        email: "rdannohl4@myspace.com",
+        gender: "Male",
+    },
+    {
+        first_name: "Arne",
+        last_name: "Alwen",
+        email: "aalwen5@wix.com",
+        gender: "Male",
+    },
+    {
+        first_name: "Dot",
+        last_name: "Durning",
+        email: "ddurning6@adobe.com",
+        gender: "Genderqueer",
+    },
+    {
+        first_name: "Frieda",
+        last_name: "Pitchers",
+        email: "fpitchers7@jiathis.com",
+        gender: "Female",
+    },
+    {
+        first_name: "Dall",
+        last_name: "Caustic",
+        email: "dcaustic8@sitemeter.com",
+        gender: "Male",
+    },
+    {
+        first_name: "Jeremias",
+        last_name: "Spencook",
+        email: "jspencook9@comsenz.com",
+        gender: "Male",
+    },
+    {
+        first_name: "Paco",
+        last_name: "Laverack",
+        email: "plaveracka@vistaprint.com",
+        gender: "Male",
+    },
+    {
+        first_name: "Jermayne",
+        last_name: "Schmidt",
+        email: "jschmidtb@weebly.com",
+        gender: "Male",
+    },
+    {
+        first_name: "Aggi",
+        last_name: "Alvarado",
+        email: "aalvaradoc@telegraph.co.uk",
+        gender: "Female",
+    },
+];
