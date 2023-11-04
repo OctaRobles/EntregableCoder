@@ -1,68 +1,44 @@
-import express from "express";
-import { CarritoDao } from "../dao/CarritoDao.js";
-import { ProductoDao } from "../dao/ProductoDao.js";
+import { Router } from 'express';
+import { usersManager } from '../managers/usersManager.js';
+import { hashData, compareData } from '../utils.js';
 
-const router = express.Router();
-const carritoDao = new CarritoDao();
+const router = Router();
 
-// POST /api/carrito
-router.post('/', async (_req, res) => {
-    const newCart = await carritoDao.createCart();
-    
-    newCart
-        ? res.status(200).json({"success": "Product added with ID " + newCart._id})
-        : res.status(500).json({"error": "there was an error"})
-    
-})
-
-// DELETE /api/carrito/id
-router.delete('/:id', async(req,res) => {
-    const { id } = req.params;
-    const wasDeleted = await carritoDao.deleteCartById(id);
-    
-    wasDeleted 
-        ? res.status(200).json({"success": "cart successfully removed"})
-        : res.status(404).json({"error": "cart not found"})
-     
-})
-
-// POST /api/carrito/:id/productos
-
-router.post('/:id/productos', async(req,res) => {
-    const { id } = req.params;
-    const { body } = req;
-    
-    const productExists = await ProductoDao.exists(body.productId);
-    
-    if(productExists) {
-        await carritoDao.saveProductToCart(id, body)
-    } else {
-        res.status(404).json({"error": "product not found"});
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    const userFound = await usersManager.findByEmail(email);
+    if (!userFound) {
+        return res.json({ error: "Email o contraseña incorrecto" });
     }
-    
+    const comparePass = await compareData(password, userFound.password);
+    if (!comparePass) {
+        return res.json({ error: "Email o contraseña incorrecto" });
+    }
+    req.session["email"] = email;
+    req.session["first_name"] = userFound.first_name;
+    req.session["last_name"] = userFound.last_name;
+    req.session["isAdmin"] = email === "adminCoder@coder.com" && password === "adminCod3r123" ? true : false;
+    res.redirect("/products");
+
 })
 
-// GET /api/carrito/:id/productos
-router.get('/:id/productos', async(req,res)=>{
-    const { id } = req.params;
-    const cartProducts = await carritoDao.getAllProductsFromCart(id);
-    
-    cartProducts
-        ? res.status(200).json(cartProducts)
-        : res.status(404).json({"error": "cart not found"})
+router.post("/signup", async (req, res) => {
+    const { first_name, last_name, email, age, password } = req.body;
+    if (!first_name || !last_name || !email || !age || !password ) {
+        return res.status(400).json({ error: "Todos los campos deben ser completados"});
+    }
+    const hashedPass = await hashData(password);
+    const createdUser = await usersManager.createOne({ ...req.body, password: hashedPass });
+    if(!createdUser) {
+        res.redirect("/signup");
+    }
+    res.status(200).redirect("/");
 })
 
-
-// DELETE /api/carrito/:id/productos/:id_prod
-router.delete('/:id/productos/:id_prod', async(req, res) => {
-    const {id, id_prod } = req.params;
-    
-    const wasDeleted = await carritoDao.deleteProductFromCart(id, id_prod);
-    
-    wasDeleted 
-        ? res.status(200).json({"success": "that product is no longer in the cart"})
-        : res.status(400).json({"error": "there was some problem"})
-    
+router.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.redirect("/");
+    });
 })
 
 export default router;
